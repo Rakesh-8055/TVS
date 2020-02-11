@@ -1,0 +1,56 @@
+{
+	"name": "DF_InterData_MetaData",
+	"properties": {
+		"description": "This Data Flow runs CRUD operations on a parquet sink using the following Parquet Inputs:\n1. Primary Key Table: a list of primary keys of rows that exist. This can be both the master list of primary keys or just a list of primary keys of rows that have been inserted/updated\n2. Input Data: A List of rows that are inserted, updated and deleted\n3. Existing Data: The existing sink data base\n\nThe output of this Data Flow is the equivalent of a MERGE command in SQL",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_StagingData",
+						"type": "DatasetReference"
+					},
+					"name": "SourceStagingData"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_ProductionData",
+						"type": "DatasetReference"
+					},
+					"name": "SourceProductiondata"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_IntermediateData",
+						"type": "DatasetReference"
+					},
+					"name": "SinkIntermediateData"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Metadata",
+						"type": "DatasetReference"
+					},
+					"name": "SinkMetadata"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FilterUpdatedData"
+				},
+				{
+					"name": "AppendExistingAndInserted"
+				},
+				{
+					"name": "PartitionStagingData"
+				},
+				{
+					"name": "AgrMaxOfStagingData"
+				}
+			],
+			"script": "source(output(\n\t\tid as string,\n\t\tname as string,\n\t\tenquiry_date as string,\n\t\tcreated_on as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpurgeFiles: true,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet',\n\tpartitionBy('roundRobin', 2)) ~> SourceStagingData\nsource(output(\n\t\tid as string,\n\t\tname as string,\n\t\tenquiry_date as string,\n\t\tcreated_on as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpurgeFiles: true,\n\tformat: 'parquet',\n\tpartitionBy('roundRobin', 2)) ~> SourceProductiondata\nSourceProductiondata, SourceStagingData exists(SourceProductiondata@id == SourceStagingData@id,\n\tnegate:true,\n\tbroadcast: 'none')~> FilterUpdatedData\nSourceStagingData, FilterUpdatedData union(byName: true)~> AppendExistingAndInserted\nAppendExistingAndInserted derive(each(match(name=='enquiry_date'), 'year' = year(toDate(substring(toString($$),0,10),'yyyy-MM-dd')))) ~> PartitionStagingData\nSourceStagingData aggregate(created_on = max(created_on)) ~> AgrMaxOfStagingData\nPartitionStagingData sink(input(\n\t\tid as string,\n\t\tname as string,\n\t\tenquiry_date as string,\n\t\tcreated_on as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionBy('key',\n\t\t0,\n\t\tyear\n\t)) ~> SinkIntermediateData\nAgrMaxOfStagingData sink(input(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> SinkMetadata"
+		}
+	}
+}

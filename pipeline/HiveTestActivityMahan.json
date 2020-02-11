@@ -1,0 +1,33 @@
+{
+	"name": "HiveTestActivityMahan",
+	"properties": {
+		"activities": [
+			{
+				"name": "HiveTest",
+				"type": "HDInsightHive",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"scriptPath": "sample/test_incr_update_data/hivequeries/hive_create_db.hql",
+					"scriptLinkedService": {
+						"referenceName": "HiveScriptLinkedService",
+						"type": "LinkedServiceReference"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "linkedService2",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

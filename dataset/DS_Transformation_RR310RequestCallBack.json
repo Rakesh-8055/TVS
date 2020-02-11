@@ -1,0 +1,93 @@
+{
+	"name": "DS_Transformation_RR310RequestCallBack",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-transform_datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "tvsm/oog/prospect360/lms/raw/dbo.rr310_request_call_back",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT32"
+			},
+			{
+				"name": "name",
+				"type": "UTF8"
+			},
+			{
+				"name": "mobile",
+				"type": "UTF8"
+			},
+			{
+				"name": "email",
+				"type": "UTF8"
+			},
+			{
+				"name": "user_ip",
+				"type": "UTF8"
+			},
+			{
+				"name": "created_on",
+				"type": "INT96"
+			},
+			{
+				"name": "website",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_medium",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_campaign",
+				"type": "UTF8"
+			},
+			{
+				"name": "ws_response",
+				"type": "UTF8"
+			},
+			{
+				"name": "hot_or_cold",
+				"type": "INT32"
+			},
+			{
+				"name": "model",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_content",
+				"type": "UTF8"
+			},
+			{
+				"name": "apistatus",
+				"type": "UTF8"
+			},
+			{
+				"name": "checkbox_status",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

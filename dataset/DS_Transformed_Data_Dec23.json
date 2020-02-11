@@ -1,0 +1,46 @@
+{
+	"name": "DS_Transformed_Data_Dec23",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tablename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat('Dec21/transformeddata/',dataset().tablename)",
+					"type": "Expression"
+				},
+				"fileSystem": "sample"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "UTF8"
+			},
+			{
+				"name": "name",
+				"type": "UTF8"
+			},
+			{
+				"name": "enquiry_date",
+				"type": "UTF8"
+			},
+			{
+				"name": "created_on",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

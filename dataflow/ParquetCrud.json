@@ -1,0 +1,66 @@
+{
+	"name": "ParquetCrud",
+	"properties": {
+		"description": "This Data Flow runs CRUD operations on a parquet sink using the following Parquet Inputs:\n1. Primary Key Table: a list of primary keys of rows that exist. This can be both the master list of primary keys or just a list of primary keys of rows that have been inserted/updated\n2. Input Data: A List of rows that are inserted, updated and deleted\n3. Existing Data: The existing sink data base\n\nThe output of this Data Flow is the equivalent of a MERGE command in SQL",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "InputDataStagingData",
+						"type": "DatasetReference"
+					},
+					"name": "PKTable"
+				},
+				{
+					"dataset": {
+						"referenceName": "InputDataStagingData",
+						"type": "DatasetReference"
+					},
+					"name": "InputData"
+				},
+				{
+					"dataset": {
+						"referenceName": "ExistingDataProdData",
+						"type": "DatasetReference"
+					},
+					"name": "ExistingData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Inter_ProdData",
+						"type": "DatasetReference"
+					},
+					"name": "ParquetCrudOutput"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Metadata_TestIncrUpdateData",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FilterUpdatedData"
+				},
+				{
+					"name": "FilterDeletedData"
+				},
+				{
+					"name": "AppendExistingAndInserted"
+				},
+				{
+					"name": "DerivePartitionColumn"
+				},
+				{
+					"name": "Aggregate1"
+				}
+			],
+			"script": "source(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tenquiry_date as timestamp,\n\t\tcreated_on as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionBy('roundRobin', 2)) ~> PKTable\nsource(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tenquiry_date as timestamp,\n\t\tcreated_on as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionBy('roundRobin', 2)) ~> InputData\nsource(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tenquiry_date as timestamp,\n\t\tcreated_on as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpurgeFiles: true,\n\tformat: 'parquet',\n\tpartitionBy('roundRobin', 2)) ~> ExistingData\nExistingData, InputData exists(ExistingData@id == InputData@id,\n\tnegate:true,\n\tbroadcast: 'none')~> FilterUpdatedData\nInputData, PKTable exists(InputData@id == PKTable@id,\n\tnegate:false,\n\tbroadcast: 'none')~> FilterDeletedData\nFilterDeletedData, FilterUpdatedData union(byName: true)~> AppendExistingAndInserted\nAppendExistingAndInserted derive(each(match(name=='enquiry_date'), 'year' = year(toDate(substring(toString($$),0,10),'yyyy-MM-dd')))) ~> DerivePartitionColumn\nInputData aggregate(created_on = max(created_on)) ~> Aggregate1\nDerivePartitionColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionBy('key',\n\t\t0,\n\t\tyear\n\t)) ~> ParquetCrudOutput\nAggregate1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> sink1"
+		}
+	}
+}

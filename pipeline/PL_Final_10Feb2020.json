@@ -1,0 +1,430 @@
+{
+	"name": "PL_Final_10Feb2020",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup_TableList",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_Final_TableList",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEachTable",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup_TableList",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup_TableList').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "LUA_MetadataMaxLookup",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"wildcardFileName": "*.csv",
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"dataset": {
+									"referenceName": "DS_Metadata1",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@item().table_name",
+											"type": "Expression"
+										}
+									}
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "LUA_SourceMaxLookup",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "select max(@{item().col_name}) as max_created_on from @{item().table_name}",
+										"type": "Expression"
+									}
+								},
+								"dataset": {
+									"referenceName": "DS_OnPremiseTVS_SQLServer_LMS",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "CDA_SourceCopyData",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "LUA_MetadataMaxLookup",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "LUA_SourceMaxLookup",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "SELECT * FROM @{item().table_name} WHERE @{item().col_name} > convert(datetime,'@{activity('LUA_MetadataMaxLookup').output.firstRow.Prop_0}',121) AND @{item().col_name} <= convert(datetime,'@{activity('LUA_SourceMaxLookup').output.firstRow.max_created_on}',126)",
+										"type": "Expression"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_OnPremiseTVS_SQLServer_LMS",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_StagingData1",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@item().table_name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "LUA_SourceCount",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "LUA_MetadataMaxLookup",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "LUA_SourceMaxLookup",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "SELECT count(*) as maxcount FROM @{item().table_name} WHERE @{item().col_name} > convert(datetime,'@{activity('LUA_MetadataMaxLookup').output.firstRow.Prop_0}',121) AND @{item().col_name} <= convert(datetime,'@{activity('LUA_SourceMaxLookup').output.firstRow.max_created_on}',126)",
+										"type": "Expression"
+									}
+								},
+								"dataset": {
+									"referenceName": "DS_OnPremiseTVS_SQLServer_LMS",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "IFCA_CustomDataValidatioin",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "CDA_SourceCopyData",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "LUA_SourceCount",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@and(equals(activity('CDA_SourceCopyData').output.rowscopied,activity('LUA_SourceCount').output.firstRow.maxcount), greater(activity('LUA_SourceCount').output.firstRow.maxcount,0))",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "DeleteStagingData",
+										"type": "Delete",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"dataset": {
+												"referenceName": "DS_StagingData1",
+												"type": "DatasetReference",
+												"parameters": {
+													"tablename": {
+														"value": "@item().table_name",
+														"type": "Expression"
+													}
+												}
+											},
+											"enableLogging": false,
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true,
+												"wildcardFileName": "*.parquet"
+											}
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "CDA_ArchiveCopyData",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ParquetSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true,
+													"wildcardFileName": "*.parquet"
+												}
+											},
+											"sink": {
+												"type": "ParquetSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												}
+											},
+											"enableStaging": false
+										},
+										"inputs": [
+											{
+												"referenceName": "DS_StagingData1",
+												"type": "DatasetReference",
+												"parameters": {
+													"tablename": {
+														"value": "@item().table_name",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "DS_ArchiveData1",
+												"type": "DatasetReference",
+												"parameters": {
+													"tablename": {
+														"value": "@item().table_name",
+														"type": "Expression"
+													},
+													"year": {
+														"value": "@formatDateTime(utcnow(),'yyyy')",
+														"type": "Expression"
+													},
+													"month": {
+														"value": "@formatDateTime(utcnow(),'MM')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "DeleteMetadata",
+										"type": "Delete",
+										"dependsOn": [
+											{
+												"activity": "CDA_ArchiveCopyData",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"dataset": {
+												"referenceName": "DS_Metadata1",
+												"type": "DatasetReference",
+												"parameters": {
+													"tablename": {
+														"value": "@item().table_name",
+														"type": "Expression"
+													}
+												}
+											},
+											"enableLogging": false,
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true,
+												"wildcardFileName": "*.csv"
+											}
+										}
+									},
+									{
+										"name": "DF_Production_And_Metdata_LMS_BuyTestRide",
+										"type": "ExecuteDataFlow",
+										"dependsOn": [
+											{
+												"activity": "DeleteMetadata",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"dataflow": {
+												"referenceName": "DF_Final_Prod_10feb2020",
+												"type": "DataFlowReference",
+												"parameters": {
+													"part_col": "\"created_on\""
+												},
+												"datasetParameters": {
+													"source1": {
+														"tablename": {
+															"value": "@item().table_name",
+															"type": "Expression"
+														}
+													},
+													"sink1": {
+														"tablename": {
+															"value": "@item().table_name",
+															"type": "Expression"
+														}
+													}
+												}
+											},
+											"compute": {
+												"coreCount": 8,
+												"computeType": "General"
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

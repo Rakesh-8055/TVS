@@ -1,0 +1,45 @@
+{
+	"name": "DS_to_get_staging_data_jan8",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "test_pipeline/@{item().table_name}/staging_data",
+					"type": "Expression"
+				},
+				"fileSystem": "sample"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT32"
+			},
+			{
+				"name": "name",
+				"type": "UTF8"
+			},
+			{
+				"name": "enquiry_date",
+				"type": "DATE"
+			},
+			{
+				"name": "created_on",
+				"type": "DATE"
+			},
+			{
+				"name": "createdon",
+				"type": "DATE"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

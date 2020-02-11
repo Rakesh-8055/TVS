@@ -1,0 +1,12 @@
+{
+	"name": "AzurelinkedServiceforhive",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"connectionString": "DefaultEndpointsProtocol=https;AccountName=samplesakhahdistorage;EndpointSuffix=core.windows.net;",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlRWU00tT09HLURFTU9fMDk4M2Q5ODMtZjM4NS00NGQxLTk3YTAtY2QyNjE1ODU0Y2Y2Ig0KfQ=="
+		}
+	}
+}

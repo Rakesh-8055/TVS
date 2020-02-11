@@ -1,0 +1,298 @@
+{
+	"name": "NewPRPipelineHive",
+	"properties": {
+		"activities": [
+			{
+				"name": "LookupTableList",
+				"description": "Retrieve the table list from Azure SQL database",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_Dynamic_Pipeline",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "IterateEachtables",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LookupTableList",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LookupTableList').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "CD_SourceCopydata",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "select * from @{item().table_name}",
+										"type": "Expression"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "SqlServerTable1",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_Staging_data_Final",
+									"type": "DatasetReference"
+								}
+							]
+						},
+						{
+							"name": "HiveOnDemand",
+							"type": "HDInsightHive",
+							"dependsOn": [
+								{
+									"activity": "CD_ArchiveCopyData",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"scriptPath": "hive1/hivescript1.hql",
+								"defines": {
+									"dbname": {
+										"value": "@pipeline().parameters.dbname",
+										"type": "Expression"
+									},
+									"tbname": {
+										"value": "@{item().table_name}",
+										"type": "Expression"
+									},
+									"tbpath": {
+										"value": "@concat('abfs://sample@tvsmdemoaccountg2.dfs.core.windows.net/test_incr_update_data/stagingdata1/',item().table_name)",
+										"type": "Expression"
+									},
+									"mdpath": {
+										"value": "@concat('abfs://sample@tvsmdemoaccountg2.dfs.core.windows.net/test_incr_update_data/Metadata1/',item().table_name)",
+										"type": "Expression"
+									},
+									"colname": {
+										"value": "@{item().max_col_name}",
+										"type": "Expression"
+									},
+									"pdpath": {
+										"value": "@concat('abfs://sample@tvsmdemoaccountg2.dfs.core.windows.net/test/hiveo/',item().table_name)",
+										"type": "Expression"
+									}
+								},
+								"scriptLinkedService": {
+									"referenceName": "AzureDataLakeStorage1",
+									"type": "LinkedServiceReference"
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "hdinsightyash",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "CD_ArchiveCopyData",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "CD_SourceCopydata",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"wildcardFileName": "*.parquet"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Staging_data_Final",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ArchiveData",
+									"type": "DatasetReference",
+									"parameters": {
+										"year": {
+											"value": "@formatDateTime(utcnow(),'yyyy')",
+											"type": "Expression"
+										},
+										"month": {
+											"value": "@formatDateTime(utcnow(),'MM')",
+											"type": "Expression"
+										},
+										"tablename": {
+											"value": "@{item().table_name}",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "HiveOnDemand",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"wildcardFileName": "*",
+										"enablePartitionDiscovery": false
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_HiveToProd",
+									"type": "DatasetReference",
+									"parameters": {
+										"table_name": {
+											"value": "@{item().table_name}",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ProductionData",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@{item().table_name}",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"max_col_name": {
+				"type": "string",
+				"defaultValue": "created_on"
+			},
+			"dbname": {
+				"type": "string",
+				"defaultValue": "tvsmdb3"
+			}
+		},
+		"folder": {
+			"name": "dynamic_multitbl_pipeline"
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

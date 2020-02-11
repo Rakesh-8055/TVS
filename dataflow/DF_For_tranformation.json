@@ -1,0 +1,32 @@
+{
+	"name": "DF_For_tranformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_For_Tranformation",
+						"type": "DatasetReference"
+					},
+					"name": "sourcetable1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_For_Transformation_Sink",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "distinct"
+				}
+			],
+			"script": "source(output(\n\t\tid as string,\n\t\tname as string,\n\t\tenquiry_date as string,\n\t\tcreated_on as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> sourcetable1\nsourcetable1 aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = max($$))) ~> distinct\ndistinct sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet') ~> sink1"
+		}
+	}
+}

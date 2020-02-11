@@ -1,0 +1,48 @@
+{
+	"name": "DF_BuyTestRideUniverse",
+	"properties": {
+		"folder": {
+			"name": "tvsm-lms-production_dataflows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_ToGet_StagingData_BuyTestRideUniverse",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceStagingData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Metadata1",
+						"type": "DatasetReference"
+					},
+					"name": "DFSinkMetadata"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_ProductionData1",
+						"type": "DatasetReference"
+					},
+					"name": "DFSinkProductionData"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DFAgrMaxOfStagingData"
+				},
+				{
+					"name": "DFDCDateConversion"
+				},
+				{
+					"name": "DFDCPartitionStagingData"
+				}
+			],
+			"script": "parameters{\n\ttablename as string\n}\nsource(output(\n\t\tid as integer,\n\t\tbuy as boolean,\n\t\ttest as boolean,\n\t\tfinance as boolean,\n\t\tmodel as string,\n\t\tdealer_id as string,\n\t\tname as string,\n\t\tmobile as string,\n\t\temail as string,\n\t\tcity as string,\n\t\tuser_ip as string,\n\t\twebsite as string,\n\t\tvisible as boolean,\n\t\tcreated_on as timestamp,\n\t\tdealer_name as string,\n\t\tstatus as string,\n\t\tresult as string,\n\t\terrormsg as string,\n\t\tleadstatus as string,\n\t\tflag as string,\n\t\thot_or_cold as integer,\n\t\tstate_id as string,\n\t\tcity_id as string,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\tutm_content as string,\n\t\tgclid as string,\n\t\tthana as string,\n\t\tdistrict as string,\n\t\tcheckbox_status as boolean,\n\t\tutm_term as string,\n\t\tauto_api_leadstatus as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpurgeFiles: true,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet',\n\twildcardPaths:[('tvsm/oog/prospect360/lms/staging/'+$tablename)]) ~> DFSourceStagingData\nDFSourceStagingData aggregate(created_on = max(created_on)) ~> DFAgrMaxOfStagingData\nDFAgrMaxOfStagingData derive(created_on = toString(created_on)) ~> DFDCDateConversion\nDFSourceStagingData derive(each(match(name=='created_on'), 'year' = year(toDate(substring(toString($$),0,10),'yyyy-MM-dd')))) ~> DFDCPartitionStagingData\nDFDCDateConversion sink(input(\n\t\tColumn_1 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> DFSinkMetadata\nDFDCPartitionStagingData sink(input(\n\t\tapp_info_firebase_app_id as string,\n\t\tapp_info_id as string,\n\t\tapp_info_install_source as string,\n\t\tapp_info_version as string,\n\t\tdevice_category as string,\n\t\tdevice_is_limited_ad_tracking as string,\n\t\tdevice_language as string,\n\t\tdevice_mobile_brand_name as string,\n\t\tdevice_mobile_marketing_name as string,\n\t\tdevice_mobile_model_name as string,\n\t\tdevice_mobile_os_hardware_model as string,\n\t\tdevice_operating_system as string,\n\t\tdevice_operating_system_version as string,\n\t\tdevice_time_zone_offset_seconds as long,\n\t\tdevice_vendor_id as string,\n\t\tevent_bundle_sequence_id as long,\n\t\tevent_date as string,\n\t\tevent_params_campaign_info_source as string,\n\t\tevent_params_click_timestamp as long,\n\t\tevent_params_engaged_session_event as long,\n\t\tevent_params_engagement_time_msec as long,\n\t\tevent_params_entrances as long,\n\t\tevent_params_error_value as string,\n\t\tevent_params_fatal as long,\n\t\tevent_params_feedbackMessage as string,\n\t\tevent_params_firebase_conversion as long,\n\t\tevent_params_firebase_error as long,\n\t\tevent_params_firebase_event_origin as string,\n\t\tevent_params_firebase_previous_class as string,\n\t\tevent_params_firebase_previous_id as long,\n\t\tevent_params_firebase_screen_class as string,\n\t\tevent_params_firebase_screen_id as long,\n\t\tevent_params_ga_session_id as long,\n\t\tevent_params_ga_session_number as long,\n\t\tevent_params_medium as string,\n\t\tevent_params_previous_app_version as string,\n\t\tevent_params_previous_first_open_count as long,\n\t\tevent_params_previous_os_version as string,\n\t\tevent_params_session_engaged as long,\n\t\tevent_params_source as string,\n\t\tevent_params_system_app as long,\n\t\tevent_params_system_app_update as long,\n\t\tevent_params_term as string,\n\t\tevent_params_timestamp as long,\n\t\tevent_params_update_with_analytics as long,\n\t\tevent_params_userId as string,\n\t\tevent_params_vehicleName as string,\n\t\tevent_params_vinNumber as string,\n\t\tevent_previous_timestamp as long,\n\t\tevent_server_timestamp_offset as long,\n\t\tevent_timestamp as long,\n\t\tgeo_city as string,\n\t\tgeo_continent as string,\n\t\tgeo_country as string,\n\t\tgeo_metro as string,\n\t\tgeo_region as string,\n\t\tgeo_sub_continent as string,\n\t\tplatform as string,\n\t\tstream_id as string,\n\t\ttraffic_source_medium as string,\n\t\ttraffic_source_name as string,\n\t\ttraffic_source_source as string,\n\t\tuser_first_touch_timestamp as long,\n\t\tuser_properties_first_open_time as long,\n\t\tuser_properties_first_open_time_set_timestamp_micros as long,\n\t\tuser_properties_ga_session_id as long,\n\t\tuser_properties_ga_session_id_set_timestamp_micros as long,\n\t\tuser_properties_ga_session_number as long,\n\t\tuser_properties_ga_session_number_set_timestamp_micros as long,\n\t\tuser_pseudo_id as string,\n\t\tevent_name as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionBy('key',\n\t\t0,\n\t\tyear\n\t)) ~> DFSinkProductionData"
+		}
+	}
+}

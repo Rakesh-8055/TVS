@@ -1,0 +1,41 @@
+{
+	"name": "DS_STag_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "test_pipeline/@{item().table_name}/staging_data",
+					"type": "Expression"
+				},
+				"fileSystem": "sample"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "UTF8"
+			},
+			{
+				"name": "name",
+				"type": "UTF8"
+			},
+			{
+				"name": "enquiry_date",
+				"type": "UTF8"
+			},
+			{
+				"name": "created_on",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

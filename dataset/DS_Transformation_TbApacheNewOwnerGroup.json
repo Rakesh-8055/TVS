@@ -1,0 +1,93 @@
+{
+	"name": "DS_Transformation_TbApacheNewOwnerGroup",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-transform_datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "tvsm/oog/prospect360/lms/raw/dbo.tb_apache_new_owner_group",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT64"
+			},
+			{
+				"name": "name",
+				"type": "UTF8"
+			},
+			{
+				"name": "email",
+				"type": "UTF8"
+			},
+			{
+				"name": "mobile",
+				"type": "DECIMAL",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "registering_as",
+				"type": "UTF8"
+			},
+			{
+				"name": "license",
+				"type": "UTF8"
+			},
+			{
+				"name": "bike_model",
+				"type": "UTF8"
+			},
+			{
+				"name": "em_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "em_mobile",
+				"type": "DECIMAL",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "created_on",
+				"type": "INT96"
+			},
+			{
+				"name": "mail_result",
+				"type": "UTF8"
+			},
+			{
+				"name": "sms_result",
+				"type": "UTF8"
+			},
+			{
+				"name": "ip",
+				"type": "UTF8"
+			},
+			{
+				"name": "amount",
+				"type": "INT64"
+			},
+			{
+				"name": "city",
+				"type": "UTF8"
+			},
+			{
+				"name": "year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

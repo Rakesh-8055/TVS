@@ -1,0 +1,101 @@
+{
+	"name": "DS_Transformation_TbTVSWegoCRStoLMS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-transform_datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "tvsm/oog/prospect360/lms/raw/dbo.tb_tvswego_crstolms",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT32"
+			},
+			{
+				"name": "esbTransId",
+				"type": "UTF8"
+			},
+			{
+				"name": "datetimeget",
+				"type": "INT96"
+			},
+			{
+				"name": "channel",
+				"type": "UTF8"
+			},
+			{
+				"name": "EventType",
+				"type": "UTF8"
+			},
+			{
+				"name": "Service_Number",
+				"type": "UTF8"
+			},
+			{
+				"name": "Sender_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "Mobile_Number",
+				"type": "UTF8"
+			},
+			{
+				"name": "Duration",
+				"type": "UTF8"
+			},
+			{
+				"name": "Pulses",
+				"type": "UTF8"
+			},
+			{
+				"name": "Message",
+				"type": "UTF8"
+			},
+			{
+				"name": "Status",
+				"type": "UTF8"
+			},
+			{
+				"name": "Events",
+				"type": "UTF8"
+			},
+			{
+				"name": "Operator",
+				"type": "UTF8"
+			},
+			{
+				"name": "Circle",
+				"type": "UTF8"
+			},
+			{
+				"name": "Created_on",
+				"type": "INT96"
+			},
+			{
+				"name": "hot_or_cold",
+				"type": "INT32"
+			},
+			{
+				"name": "api_status",
+				"type": "UTF8"
+			},
+			{
+				"name": "year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

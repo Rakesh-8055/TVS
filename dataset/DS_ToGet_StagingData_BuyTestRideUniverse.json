@@ -1,0 +1,156 @@
+{
+	"name": "DS_ToGet_StagingData_BuyTestRideUniverse",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-production-datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT32"
+			},
+			{
+				"name": "buy",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "test",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "finance",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "model",
+				"type": "UTF8"
+			},
+			{
+				"name": "dealer_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "name",
+				"type": "UTF8"
+			},
+			{
+				"name": "mobile",
+				"type": "UTF8"
+			},
+			{
+				"name": "email",
+				"type": "UTF8"
+			},
+			{
+				"name": "city",
+				"type": "UTF8"
+			},
+			{
+				"name": "user_ip",
+				"type": "UTF8"
+			},
+			{
+				"name": "website",
+				"type": "UTF8"
+			},
+			{
+				"name": "visible",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "created_on",
+				"type": "INT96"
+			},
+			{
+				"name": "dealer_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "status",
+				"type": "UTF8"
+			},
+			{
+				"name": "result",
+				"type": "UTF8"
+			},
+			{
+				"name": "errormsg",
+				"type": "UTF8"
+			},
+			{
+				"name": "leadstatus",
+				"type": "UTF8"
+			},
+			{
+				"name": "flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "hot_or_cold",
+				"type": "INT32"
+			},
+			{
+				"name": "state_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "city_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_medium",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_campaign",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_content",
+				"type": "UTF8"
+			},
+			{
+				"name": "gclid",
+				"type": "UTF8"
+			},
+			{
+				"name": "thana",
+				"type": "UTF8"
+			},
+			{
+				"name": "district",
+				"type": "UTF8"
+			},
+			{
+				"name": "checkbox_status",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "utm_term",
+				"type": "UTF8"
+			},
+			{
+				"name": "auto_api_leadstatus",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

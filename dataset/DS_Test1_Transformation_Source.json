@@ -1,0 +1,22 @@
+{
+	"name": "DS_Test1_Transformation_Source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "data_ff30c269-5342-4ad6-b815-ebfa9eaf8bcc_24a44813-5be0-43a3-b616-c166da8e6cfd.parquet",
+				"folderPath": "Dec21/stagingdata/test3",
+				"fileSystem": "sample"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

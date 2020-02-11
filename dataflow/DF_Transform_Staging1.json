@@ -1,0 +1,308 @@
+{
+	"name": "DF_Transform_Staging1",
+	"properties": {
+		"folder": {
+			"name": "tvsm-lms-transformation_dataflows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_BuyTestRide",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataBuytestride"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_CommonAPILeads",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataCommonAPILeads"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_RR310RequestCallBack",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataRR310RequestCallBack"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_TbTVSFbCRMApi2019",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataTbTVSFbCRMApi2019"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_TbTVSDealerWs",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataTbTVSDealerWs"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_ApacheMotoSoulRegistrations",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataApacheMotoSoulRegistrations"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_ApacheRacingExperience",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataApacheRacingExperience"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_TbApacheNewOwnerGroup",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataTbApacheNewOwnerGroup"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_TVSFestivalCampaign2018",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataTVSFestivalCampaign2018"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_BuyTestRideIB",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataBuyTestRideIB"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_TbTVSWegoCRStoLMS",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataTbTVSWegoCRStoLMS"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_TbTVSCommonTruecallerLeads",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataTbTVSCommonTruecallerLeads"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_TbTVSCommonAPIWithoutCRM",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataTbTVSCommonAPIWithoutCRM"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_TbTVSNtorqFbLeads",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataTbTVSNtorqFbLeads"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Transformation_TbTVSmotorScooterRange2018",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceRawDataTbTVSMotorScooterRange2018"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_ServiceNumberMastertable",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceServiceNumberMastertable"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_BrandId_Mapping",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceBrandIdMapping"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Transform_StagingData",
+						"type": "DatasetReference"
+					},
+					"name": "DFSinkTransformStagingData1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DFAggrDistinctIDProductionData1"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData2"
+				},
+				{
+					"name": "DFSelectRawData1"
+				},
+				{
+					"name": "DFSelectRawData2"
+				},
+				{
+					"name": "DFDCPartitionTransformedData"
+				},
+				{
+					"name": "DFUnion"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData3"
+				},
+				{
+					"name": "DFSelectRawData3"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData4"
+				},
+				{
+					"name": "DFSelectRawData4"
+				},
+				{
+					"name": "DFAggrDistinctProductionData5"
+				},
+				{
+					"name": "DFSelectRawData5"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData6"
+				},
+				{
+					"name": "DFSelectRawData6"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData7"
+				},
+				{
+					"name": "DFSelectRawData7"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData8"
+				},
+				{
+					"name": "DFSelectRawData8"
+				},
+				{
+					"name": "DFAggrDistincIDtProductionData9"
+				},
+				{
+					"name": "DFSelectRawData9"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData10"
+				},
+				{
+					"name": "DFSelectRawData10"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData11"
+				},
+				{
+					"name": "DFSelectRawData11"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData12"
+				},
+				{
+					"name": "DFSelectRawData12"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData13"
+				},
+				{
+					"name": "DFSelectRawData13"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData14"
+				},
+				{
+					"name": "DFSelectRawData14"
+				},
+				{
+					"name": "DFAggrDistinctIDProductionData15"
+				},
+				{
+					"name": "DFSelectRawData15"
+				},
+				{
+					"name": "DFDCModifyBrand9",
+					"description": "Autogenerated by data preview actions"
+				},
+				{
+					"name": "DFDCModifyMobileColumn8",
+					"description": "Autogenerated by data preview actions"
+				},
+				{
+					"name": "DFJoinProductionDataWithMasterTable"
+				},
+				{
+					"name": "DFDCForSourceColumn11"
+				},
+				{
+					"name": "DFDCTableName1"
+				},
+				{
+					"name": "DFDCTableName2"
+				},
+				{
+					"name": "DFDCTableName3"
+				},
+				{
+					"name": "DFDCTableName4"
+				},
+				{
+					"name": "DFDCTableName5"
+				},
+				{
+					"name": "DFDCTableName6"
+				},
+				{
+					"name": "DFDCTableName7"
+				},
+				{
+					"name": "DFDCTableName10"
+				},
+				{
+					"name": "DFDCTableName12"
+				},
+				{
+					"name": "DFDCTableName13"
+				},
+				{
+					"name": "DFDCTableName14"
+				},
+				{
+					"name": "DFDCTableName15"
+				},
+				{
+					"name": "DFDCForWego"
+				},
+				{
+					"name": "DFDCForJupiter"
+				},
+				{
+					"name": "DFDCForNtorq"
+				},
+				{
+					"name": "DFDCForScootypep"
+				},
+				{
+					"name": "UnionAllModels"
+				},
+				{
+					"name": "Join1"
+				}
+			],
+			"script": "source(output(\n\t\tid as integer,\n\t\tbuy as boolean,\n\t\ttest as boolean,\n\t\tfinance as boolean,\n\t\tmodel as string,\n\t\tdealer_id as string,\n\t\tname as string,\n\t\tmobile as string,\n\t\temail as string,\n\t\tcity as string,\n\t\tuser_ip as string,\n\t\twebsite as string,\n\t\tvisible as boolean,\n\t\tcreated_on as timestamp,\n\t\tdealer_name as string,\n\t\tstatus as string,\n\t\tresult as string,\n\t\terrormsg as string,\n\t\tleadstatus as string,\n\t\tflag as string,\n\t\thot_or_cold as integer,\n\t\tstate_id as string,\n\t\tcity_id as string,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\tutm_content as string,\n\t\tgclid as string,\n\t\tthana as string,\n\t\tdistrict as string,\n\t\tcheckbox_status as boolean,\n\t\tutm_term as string,\n\t\tauto_api_leadstatus as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataBuytestride\nsource(output(\n\t\tid as long,\n\t\tname as string,\n\t\tmobile as string,\n\t\temail as string,\n\t\tmodel_name as string,\n\t\tcity as string,\n\t\tcreate_date_get as timestamp,\n\t\tcreate_date as timestamp,\n\t\tmodel_id as integer,\n\t\tlanguage_id as integer,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\tgclid as string,\n\t\thot_or_cold as integer,\n\t\tflag as string,\n\t\tcrm_push as integer,\n\t\tcrm_response as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataCommonAPILeads\nsource(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tmobile as string,\n\t\temail as string,\n\t\tuser_ip as string,\n\t\tcreated_on as timestamp,\n\t\twebsite as string,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\tws_response as string,\n\t\thot_or_cold as integer,\n\t\tmodel as string,\n\t\tutm_content as string,\n\t\tapistatus as string,\n\t\tcheckbox_status as boolean,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataRR310RequestCallBack\nsource(output(\n\t\tid as long,\n\t\tname as string,\n\t\tmobile as string,\n\t\temail as string,\n\t\tmodel_name as string,\n\t\tcity as string,\n\t\tcreate_date_get as timestamp,\n\t\tcreate_date as timestamp,\n\t\tmodel_id as integer,\n\t\tlanguage_id as integer,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\tgclid as string,\n\t\thot_or_cold as integer,\n\t\tflag as string,\n\t\tcrm_push as integer,\n\t\tcrm_response as string,\n\t\tform_id as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataTbTVSFbCRMApi2019\nsource(output(\n\t\tid as integer,\n\t\tdealer_id as string,\n\t\tdealer_name as string,\n\t\tcust_name as string,\n\t\tcust_mobile as string,\n\t\tcust_email as string,\n\t\tcust_city as string,\n\t\tbrandname as string,\n\t\tcust_flag as string,\n\t\tlatitude as string,\n\t\tlongitude as string,\n\t\tCreated_on as timestamp,\n\t\twsgetdate as timestamp,\n\t\thot_or_cold as integer,\n\t\tLead_source as string,\n\t\tcomments as string,\n\t\tapi_status as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataTbTVSDealerWs\nsource(output(\n\t\tid as integer,\n\t\tmsid as string,\n\t\tfname as string,\n\t\tlname as string,\n\t\temail as string,\n\t\tmobile as string,\n\t\temergency_mobile as string,\n\t\tstate as string,\n\t\tcity as string,\n\t\tgender as string,\n\t\tage as string,\n\t\tbloodgroup as string,\n\t\tmodel as string,\n\t\tother_vehicle as string,\n\t\tchk_groupride as boolean,\n\t\tapache_pro_performance as boolean,\n\t\tdirt_track as boolean,\n\t\tslow_track as boolean,\n\t\tobstacle_race as boolean,\n\t\tmotocross_fit as boolean,\n\t\tfmsci_license as string,\n\t\tuserip as string,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\tutm_content as string,\n\t\tcreatedon as timestamp,\n\t\tteam_name as string,\n\t\tstatus as string,\n\t\tpayment_status as integer,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataApacheMotoSoulRegistrations\nsource(output(\n\t\tid as integer,\n\t\tmodel as string,\n\t\tname as string,\n\t\tmobile as string,\n\t\temail as string,\n\t\tcity as string,\n\t\tuser_ip as string,\n\t\tvisible as boolean,\n\t\tcreated_on as timestamp,\n\t\tvenue as string,\n\t\twebsite as string,\n\t\tevent as string,\n\t\theight as string,\n\t\tbg as string,\n\t\tgender as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataApacheRacingExperience\nsource(output(\n\t\tid as long,\n\t\tname as string,\n\t\temail as string,\n\t\tmobile as decimal(18,0),\n\t\tregistering_as as string,\n\t\tlicense as string,\n\t\tbike_model as string,\n\t\tem_name as string,\n\t\tem_mobile as decimal(18,0),\n\t\tcreated_on as timestamp,\n\t\tmail_result as string,\n\t\tsms_result as string,\n\t\tip as string,\n\t\tamount as long,\n\t\tcity as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataTbApacheNewOwnerGroup\nsource(output(\n\t\tid as integer,\n\t\tname as string,\n\t\temail as string,\n\t\tmobile as string,\n\t\tlocation as string,\n\t\tbrand as integer,\n\t\tutm_source as string,\n\t\tutm_campaign as string,\n\t\tutm_medium as string,\n\t\tuser_ip as string,\n\t\tcampagin_name as string,\n\t\tpage_url as string,\n\t\thot_or_cold as integer,\n\t\tlead_from as string,\n\t\tcreated_on as timestamp,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataTVSFestivalCampaign2018\nsource(output(\n\t\tid as integer,\n\t\tbuy as boolean,\n\t\ttest as boolean,\n\t\tfinance as boolean,\n\t\tmodel as string,\n\t\tdealer_id as string,\n\t\tname as string,\n\t\tmobile as string,\n\t\temail as string,\n\t\tcity as string,\n\t\tuser_ip as string,\n\t\twebsite as string,\n\t\tvisible as boolean,\n\t\tcreated_on as timestamp,\n\t\tdealer_name as string,\n\t\tstatus as string,\n\t\tresult as string,\n\t\terrormsg as string,\n\t\tleadstatus as string,\n\t\tflag as string,\n\t\thot_or_cold as integer,\n\t\tstate_id as string,\n\t\tcity_id as string,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\tutm_content as string,\n\t\tgclid as string,\n\t\tthana as string,\n\t\tdistrict as string,\n\t\tcheckbox_status as boolean,\n\t\tutm_term as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataBuyTestRideIB\nsource(output(\n\t\tid as integer,\n\t\tesbTransId as string,\n\t\tdatetimeget as timestamp,\n\t\tchannel as string,\n\t\tEventType as string,\n\t\tService_Number as string,\n\t\tSender_ID as string,\n\t\tMobile_Number as string,\n\t\tDuration as string,\n\t\tPulses as string,\n\t\tMessage as string,\n\t\tStatus as string,\n\t\tEvents as string,\n\t\tOperator as string,\n\t\tCircle as string,\n\t\tCreated_on as timestamp,\n\t\thot_or_cold as integer,\n\t\tapi_status as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataTbTVSWegoCRStoLMS\nsource(output(\n\t\tid as long,\n\t\tname as string,\n\t\tmobile as string,\n\t\temail as string,\n\t\tmodel_name as string,\n\t\tcity as string,\n\t\tcreate_date_get as timestamp,\n\t\tcreate_date as timestamp,\n\t\tmodel_id as integer,\n\t\tlanguage_id as integer,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\tgclid as string,\n\t\thot_or_cold as integer,\n\t\tflag as string,\n\t\tcrm_push as boolean,\n\t\tcrm_response as string,\n\t\tqty as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataTbTVSCommonTruecallerLeads\nsource(output(\n\t\tid as long,\n\t\tname as string,\n\t\tmobile as string,\n\t\temail as string,\n\t\tmodel_name as string,\n\t\tcity as string,\n\t\tcreate_date_get as timestamp,\n\t\tcreate_date as timestamp,\n\t\tmodel_id as integer,\n\t\tlanguage_id as integer,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\tgclid as string,\n\t\thot_or_cold as integer,\n\t\tflag as string,\n\t\tcrm_push as boolean,\n\t\tcrm_response as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataTbTVSCommonAPIWithoutCRM\nsource(output(\n\t\tid as string,\n\t\tcreated_date as string,\n\t\tcreated_time as string,\n\t\tad_name as string,\n\t\tadset_id as string,\n\t\tadset_name as string,\n\t\tcampaign_id as string,\n\t\tcampaign_name as string,\n\t\tform_id as string,\n\t\tform_name as string,\n\t\tis_organic as boolean,\n\t\temail as string,\n\t\tfull_name as string,\n\t\tphone_number as string,\n\t\tState as string,\n\t\tPushed_Lead_Status as string,\n\t\thot_or_cold as string,\n\t\tcreatedon as timestamp,\n\t\tcity as string,\n\t\tflag as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataTbTVSNtorqFbLeads\nsource(output(\n\t\tid as decimal(18,0),\n\t\tname as string,\n\t\tphone as string,\n\t\temail as string,\n\t\tstate as string,\n\t\tcity as string,\n\t\tlanguage as string,\n\t\tipaddress as string,\n\t\tcreatedon as timestamp,\n\t\tflag as string,\n\t\tsrc as string,\n\t\tbid as string,\n\t\tmedium as string,\n\t\ttype as string,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_content as string,\n\t\tutm_campaign as string,\n\t\tgclid as string,\n\t\tstatus as string,\n\t\thot_or_cold as integer,\n\t\tstate_id as integer,\n\t\tcity_id as integer,\n\t\tmodelname as string,\n\t\tis_scootypep as boolean,\n\t\tis_wego as boolean,\n\t\tis_jupiter as boolean,\n\t\tis_ntorq as boolean,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> DFSourceRawDataTbTVSMotorScooterRange2018\nsource(output(\n\t\tService_number as string,\n\t\tmodel as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DFSourceServiceNumberMastertable\nsource(output(\n\t\tbrand as string,\n\t\tmodel_name as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> DFSourceBrandIdMapping\nDFSourceRawDataBuytestride aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData1\nDFSourceRawDataCommonAPILeads aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData2\nDFAggrDistinctIDProductionData1 select(mapColumn(\n\t\tmobile,\n\t\tmodel,\n\t\tsource = website,\n\t\tcreated_on,\n\t\tcity,\n\t\tdistrict,\n\t\twebsite,\n\t\tutm_source,\n\t\tutm_medium,\n\t\tutm_campaign,\n\t\tutm_content = mobile\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData1\nDFAggrDistinctIDProductionData2 select(mapColumn(\n\t\tmobile,\n\t\tmodel = model_name,\n\t\tcreated_on = create_date,\n\t\tcity,\n\t\tsource = utm_source,\n\t\tflag,\n\t\tutm_source,\n\t\tutm_medium,\n\t\tutm_campaign\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData2\nDFUnion derive(each(match(name=='created_on'), 'year' = year(toDate(substring(toString($$),0,10),'yyyy-MM-dd')))) ~> DFDCPartitionTransformedData\nDFDCTableName1, DFDCTableName2, DFDCTableName3, DFDCTableName4, DFDCTableName5, DFDCTableName6, DFDCTableName7, DFDCModifyBrand9, DFDCTableName10, DFDCForSourceColumn11, DFDCTableName12, DFDCTableName13, DFDCTableName14, DFDCTableName15, DFDCModifyMobileColumn8 union(byName: true)~> DFUnion\nDFSourceRawDataRR310RequestCallBack aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData3\nDFAggrDistinctIDProductionData3 select(mapColumn(\n\t\tmodel,\n\t\tmobile,\n\t\tsource = website,\n\t\tcreated_on,\n\t\twebsite,\n\t\tutm_source,\n\t\tutm_medium,\n\t\tutm_campaign,\n\t\tutm_content\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData3\nDFSourceRawDataTbTVSFbCRMApi2019 aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData4\nDFAggrDistinctIDProductionData4 select(mapColumn(\n\t\tmodel = model_name,\n\t\tcity,\n\t\tcreated_on = create_date,\n\t\tmobile,\n\t\tsource = flag,\n\t\tflag,\n\t\tutm_source,\n\t\tutm_medium,\n\t\tutm_campaign\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData4\nDFSourceRawDataTbTVSDealerWs aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctProductionData5\nDFAggrDistinctProductionData5 select(mapColumn(\n\t\tcity = cust_city,\n\t\tmodel = brandname,\n\t\tcreated_on = Created_on,\n\t\tmobile = cust_mobile,\n\t\tsource = Lead_source\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData5\nDFSourceRawDataApacheMotoSoulRegistrations aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData6\nDFAggrDistinctIDProductionData6 select(mapColumn(\n\t\tstate,\n\t\tcity,\n\t\tmodel,\n\t\tcreated_on = createdon,\n\t\tmobile,\n\t\tsource = utm_source,\n\t\tutm_source,\n\t\tutm_medium,\n\t\tutm_campaign,\n\t\tutm_content\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData6\nDFSourceRawDataApacheRacingExperience aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData7\nDFAggrDistinctIDProductionData7 select(mapColumn(\n\t\tmodel,\n\t\tcity,\n\t\tcreated_on,\n\t\tmobile,\n\t\tsource = website,\n\t\twebsite\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData7\nDFSourceRawDataTbApacheNewOwnerGroup aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData8\nDFAggrDistinctIDProductionData8 select(mapColumn(\n\t\tmodel = bike_model,\n\t\tcreated_on,\n\t\tcity,\n\t\tmobile\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData8\nDFSourceRawDataTVSFestivalCampaign2018 aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistincIDtProductionData9\nJoin1 select(mapColumn(\n\t\tcity = location,\n\t\tcreated_on,\n\t\tmobile,\n\t\tutm_campaign,\n\t\tsource = utm_source,\n\t\tutm_source,\n\t\tmodel = model_name\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData9\nDFSourceRawDataBuyTestRideIB aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData10\nDFAggrDistinctIDProductionData10 select(mapColumn(\n\t\tmodel,\n\t\tcity,\n\t\tcreated_on,\n\t\tdistrict,\n\t\tmobile,\n\t\tsource = utm_source,\n\t\tutm_source,\n\t\tutm_campaign,\n\t\tutm_medium,\n\t\tutm_content\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData10\nDFSourceRawDataTbTVSWegoCRStoLMS aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData11\nDFJoinProductionDataWithMasterTable select(mapColumn(\n\t\tmodel,\n\t\tcity = Circle,\n\t\tcreated_on = Created_on,\n\t\tmobile = Mobile_Number\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData11\nDFSourceRawDataTbTVSCommonTruecallerLeads aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData12\nDFAggrDistinctIDProductionData12 select(mapColumn(\n\t\tmodel = model_name,\n\t\tcity,\n\t\tcreated_on = create_date,\n\t\tmobile,\n\t\tsource = utm_source,\n\t\tutm_source,\n\t\tflag,\n\t\tutm_medium,\n\t\tutm_campaign\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData12\nDFSourceRawDataTbTVSCommonAPIWithoutCRM aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData13\nDFAggrDistinctIDProductionData13 select(mapColumn(\n\t\tmodel = model_name,\n\t\tcity,\n\t\tcreated_on = create_date,\n\t\tmobile,\n\t\tsource = utm_source,\n\t\tutm_source,\n\t\tflag,\n\t\tutm_medium,\n\t\tutm_campaign\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData13\nDFSourceRawDataTbTVSNtorqFbLeads aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData14\nDFAggrDistinctIDProductionData14 select(mapColumn(\n\t\tsource = campaign_name,\n\t\tstate = State,\n\t\tcreated_on = createdon,\n\t\tcity,\n\t\tmobile = phone_number,\n\t\tflag\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData14\nDFSourceRawDataTbTVSMotorScooterRange2018 aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> DFAggrDistinctIDProductionData15\nUnionAllModels select(mapColumn(\n\t\tstate,\n\t\tcity,\n\t\tcreated_on = createdon,\n\t\tmobile = phone,\n\t\tsource = utm_source,\n\t\tflag,\n\t\tutm_source,\n\t\tutm_medium,\n\t\tutm_campaign,\n\t\tutm_content,\n\t\tmodel\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectRawData15\nDFSelectRawData9 derive(each(match(position==1), 'table_name' = 'tvs_festival_campaign_2018')) ~> DFDCModifyBrand9\nDFSelectRawData8 derive(mobile = toString(mobile),\n\t\teach(match(position==1), 'table_name' = 'tb_apache_new_owner_group')) ~> DFDCModifyMobileColumn8\nDFAggrDistinctIDProductionData11, DFSourceServiceNumberMastertable join(DFAggrDistinctIDProductionData11@Service_Number == DFSourceServiceNumberMastertable@Service_number,\n\tjoinType:'left',\n\tbroadcast: 'none')~> DFJoinProductionDataWithMasterTable\nDFSelectRawData11 derive(each(match(position==1), 'source' = 'CRSLMS LEADS', 'table_name' = 'tb_tvswego_crstolms')) ~> DFDCForSourceColumn11\nDFSelectRawData1 derive(each(match(position==1), 'table_name' = 'buy_test_ride_universe')) ~> DFDCTableName1\nDFSelectRawData2 derive(each(match(position==1), 'table_name' = 'tb_tvs_common_api_leads')) ~> DFDCTableName2\nDFSelectRawData3 derive(each(match(position==1), 'table_name' = 'rr310_request_call_back')) ~> DFDCTableName3\nDFSelectRawData4 derive(each(match(position==1), 'table_name' = 'tb_tvs_fb_crm_api_2019')) ~> DFDCTableName4\nDFSelectRawData5 derive(each(match(position==1), 'table_name' = 'tb_tvs_dealerWs')) ~> DFDCTableName5\nDFSelectRawData6 derive(each(match(position==1), 'table_name' = 'apache_moto_soul_registrations')) ~> DFDCTableName6\nDFSelectRawData7 derive(each(match(position==1), 'table_name' = 'apache_racing_experience')) ~> DFDCTableName7\nDFSelectRawData10 derive(each(match(position==1), 'table_name' = 'buy_test_ride_IB')) ~> DFDCTableName10\nDFSelectRawData12 derive(each(match(position==1), 'table_name' = 'tb_tvs_common_truecaller_leads')) ~> DFDCTableName12\nDFSelectRawData13 derive(each(match(position==1), 'table_name' = 'tb_tvs_common_api_without_crm')) ~> DFDCTableName13\nDFSelectRawData14 derive(each(match(position==1), 'table_name' = 'tb_tvs_ntorq_fb_leads', 'model' = 'Ntorq')) ~> DFDCTableName14\nDFSelectRawData15 derive(each(match(position==1), 'table_name' = 'tb_tvsmotor_scooter_range_2018'),\n\t\tmodel = toString(model)) ~> DFDCTableName15\nDFAggrDistinctIDProductionData15 derive(each(match(name=='is_wego'), 'model' = iif($$==toBoolean('1'),'wego'))) ~> DFDCForWego\nDFAggrDistinctIDProductionData15 derive(each(match(name=='is_jupiter'), 'model' = iif($$==toBoolean('1'),'jupiter'))) ~> DFDCForJupiter\nDFAggrDistinctIDProductionData15 derive(each(match(name=='is_ntorq'), 'model' = iif($$==toBoolean('1'),'ntorq'))) ~> DFDCForNtorq\nDFAggrDistinctIDProductionData15 derive(each(match(name=='is_scootypep'), 'model' = iif($$==toBoolean('1'),'scootypep'))) ~> DFDCForScootypep\nDFDCForWego, DFDCForJupiter, DFDCForNtorq, DFDCForScootypep union(byName: true)~> UnionAllModels\nDFAggrDistincIDtProductionData9, DFSourceBrandIdMapping join(toString(DFAggrDistincIDtProductionData9@brand) == DFSourceBrandIdMapping@brand,\n\tjoinType:'left',\n\tbroadcast: 'none')~> Join1\nDFDCPartitionTransformedData sink(input(\n\t\tmobile as string,\n\t\tmodel as string,\n\t\tsource as string,\n\t\tcreated_on as timestamp,\n\t\tcity as string,\n\t\tdistrict as string,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\ttable_name as string,\n\t\tflag as string,\n\t\tutm_content as string,\n\t\tstate as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionBy('key',\n\t\t0,\n\t\tyear\n\t)) ~> DFSinkTransformStagingData1"
+		}
+	}
+}

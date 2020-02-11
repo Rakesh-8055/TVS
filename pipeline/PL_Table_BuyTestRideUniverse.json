@@ -1,0 +1,394 @@
+{
+	"name": "PL_Table_BuyTestRideUniverse",
+	"properties": {
+		"activities": [
+			{
+				"name": "LUA_MetadataMaxLookup",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_Metadata1",
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": {
+								"value": "@pipeline().parameters.tablename",
+								"type": "Expression"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "LUA_SourceMaxLookup",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "select max(@{pipeline().parameters.watermarkcolname}) as max_created_on from @{pipeline().parameters.tablename}",
+							"type": "Expression"
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_OnPremiseTVS_SQLServer_LMS",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "CDA_SourceCopyData",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "LUA_MetadataMaxLookup",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "LUA_SourceMaxLookup",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT * FROM @{pipeline().parameters.tablename}\nWHERE @{pipeline().parameters.watermarkcolname} > convert(datetime,'@{activity('LUA_MetadataMaxLookup').output.firstRow.Prop_0}',121) \nAND @{pipeline().parameters.watermarkcolname} <= convert(datetime,'@{activity('LUA_SourceMaxLookup').output.firstRow.max_created_on}',126)",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_OnPremiseTVS_SQLServer_LMS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_StagingData1",
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": {
+								"value": "@pipeline().parameters.tablename",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "LUA_SourceCount",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "LUA_MetadataMaxLookup",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "LUA_SourceMaxLookup",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT count(*) as maxcount FROM @{pipeline().parameters.tablename}\nWHERE @{pipeline().parameters.watermarkcolname} > convert(datetime,'@{activity('LUA_MetadataMaxLookup').output.firstRow.Prop_0}',121) \nAND @{pipeline().parameters.watermarkcolname} <= convert(datetime,'@{activity('LUA_SourceMaxLookup').output.firstRow.max_created_on}',126)",
+							"type": "Expression"
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_OnPremiseTVS_SQLServer_LMS",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "IFCA_CustomDataValidatioin",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "CDA_SourceCopyData",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "LUA_SourceCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@and(equals(activity('CDA_SourceCopyData').output.rowscopied,activity('LUA_SourceCount').output.firstRow.maxcount), greater(activity('LUA_SourceCount').output.firstRow.maxcount,0))",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "DeleteStagingData",
+							"type": "Delete",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "DS_StagingData1",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@pipeline().parameters.tablename",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.parquet"
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "CDA_ArchiveCopyData",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"wildcardFileName": "*.parquet"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_StagingData1",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@pipeline().parameters.tablename",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ArchiveData1",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@pipeline().parameters.tablename",
+											"type": "Expression"
+										},
+										"year": {
+											"value": "@formatDateTime(utcnow(),'yyyy')",
+											"type": "Expression"
+										},
+										"month": {
+											"value": "@formatDateTime(utcnow(),'MM')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "DeleteMetadata",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "CDA_ArchiveCopyData",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "DS_Metadata1",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@pipeline().parameters.tablename",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.csv"
+								}
+							}
+						},
+						{
+							"name": "DF_Production_And_Metdata_LMS_BuyTestRide",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [
+								{
+									"activity": "DeleteMetadata",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "DF_BuyTestRideUniverse",
+									"type": "DataFlowReference",
+									"parameters": {
+										"tablename": {
+											"value": "'@{pipeline().parameters.tablename}'",
+											"type": "Expression"
+										}
+									},
+									"datasetParameters": {
+										"DFSinkMetadata": {
+											"tablename": {
+												"value": "@pipeline().parameters.tablename",
+												"type": "Expression"
+											}
+										},
+										"DFSinkProductionData": {
+											"tablename": {
+												"value": "@pipeline().parameters.tablename",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"tablename": {
+				"type": "string",
+				"defaultValue": "dbo.buy_test_ride_universe"
+			},
+			"watermarkcolname": {
+				"type": "string",
+				"defaultValue": "created_on"
+			}
+		},
+		"folder": {
+			"name": "TVSM Pipelines"
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

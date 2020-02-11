@@ -1,0 +1,143 @@
+{
+	"name": "DS_Transformation_TbTVSmotorScooterRange2018",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-transform_datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "tvsm/oog/prospect360/lms/raw/dbo.tb_tvsmotor_scooter_range_2018",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "DECIMAL",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "name",
+				"type": "UTF8"
+			},
+			{
+				"name": "phone",
+				"type": "UTF8"
+			},
+			{
+				"name": "email",
+				"type": "UTF8"
+			},
+			{
+				"name": "state",
+				"type": "UTF8"
+			},
+			{
+				"name": "city",
+				"type": "UTF8"
+			},
+			{
+				"name": "language",
+				"type": "UTF8"
+			},
+			{
+				"name": "ipaddress",
+				"type": "UTF8"
+			},
+			{
+				"name": "createdon",
+				"type": "INT96"
+			},
+			{
+				"name": "flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "src",
+				"type": "UTF8"
+			},
+			{
+				"name": "bid",
+				"type": "UTF8"
+			},
+			{
+				"name": "medium",
+				"type": "UTF8"
+			},
+			{
+				"name": "type",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_medium",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_content",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_campaign",
+				"type": "UTF8"
+			},
+			{
+				"name": "gclid",
+				"type": "UTF8"
+			},
+			{
+				"name": "status",
+				"type": "UTF8"
+			},
+			{
+				"name": "hot_or_cold",
+				"type": "INT32"
+			},
+			{
+				"name": "state_id",
+				"type": "INT32"
+			},
+			{
+				"name": "city_id",
+				"type": "INT32"
+			},
+			{
+				"name": "modelname",
+				"type": "UTF8"
+			},
+			{
+				"name": "is_scootypep",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "is_wego",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "is_jupiter",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "is_ntorq",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

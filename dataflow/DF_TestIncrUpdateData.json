@@ -1,0 +1,35 @@
+{
+	"name": "DF_TestIncrUpdateData",
+	"properties": {
+		"folder": {
+			"name": "test_incr_update_data"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "InputDataStagingData",
+						"type": "DatasetReference"
+					},
+					"name": "StagingData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Metadata_TestIncrUpdateData",
+						"type": "DatasetReference"
+					},
+					"name": "MetadataSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AggregateMetadata"
+				}
+			],
+			"script": "source(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tenquiry_date as timestamp,\n\t\tcreated_on as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet') ~> StagingData\nStagingData aggregate(created_on = max(created_on)) ~> AggregateMetadata\nAggregateMetadata sink(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> MetadataSink"
+		}
+	}
+}

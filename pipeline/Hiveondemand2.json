@@ -1,0 +1,57 @@
+{
+	"name": "Hiveondemand2",
+	"properties": {
+		"activities": [
+			{
+				"name": "HiveOnDemand",
+				"type": "HDInsightHive",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"scriptPath": "hive1/hivescript.hql",
+					"defines": {
+						"dbname": {
+							"value": "@pipeline().parameters.dbname",
+							"type": "Expression"
+						},
+						"tbname": {
+							"value": "@pipeline().parameters.tablename",
+							"type": "Expression"
+						},
+						"tbpath": {
+							"value": "@concat('abfs://sample@tvsmdemoaccountg2.dfs.core.windows.net/test_incr_update_data/stagingdata/',pipeline().parameters.tablename)",
+							"type": "Expression"
+						}
+					},
+					"scriptLinkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "hdinsightyash",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"tablename": {
+				"type": "string",
+				"defaultValue": "enquiry_test2"
+			},
+			"dbname": {
+				"type": "string",
+				"defaultValue": "tvsm4"
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

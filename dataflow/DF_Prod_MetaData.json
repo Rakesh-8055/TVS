@@ -1,0 +1,45 @@
+{
+	"name": "DF_Prod_MetaData",
+	"properties": {
+		"folder": {
+			"name": "dynamic_multitable_dataflow"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "to_get_staging_data",
+						"type": "DatasetReference"
+					},
+					"name": "StagingDataSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Production_Data_Sink",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Metadata_Sink",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DerivedColumn1"
+				},
+				{
+					"name": "Aggregate1"
+				}
+			],
+			"script": "parameters{\n\tmax_col_name as string\n}\nsource(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tenquiry_date as date,\n\t\tcreated_on as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> StagingDataSource\nStagingDataSource derive(each(match(name=='enquiry_date'), 'year' = year($$))) ~> DerivedColumn1\nStagingDataSource aggregate(created_on = max(created_on)) ~> Aggregate1\nDerivedColumn1 sink(input(\n\t\tid as string,\n\t\tname as string,\n\t\tenquiry_date as string,\n\t\tcreated_on as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionBy('key',\n\t\t0,\n\t\tyear\n\t)) ~> sink1\nAggregate1 sink(input(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> sink2"
+		}
+	}
+}

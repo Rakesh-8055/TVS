@@ -1,0 +1,89 @@
+{
+	"name": "DS_Transformation_ApacheRacingExperience",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-transform_datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "tvsm/oog/prospect360/lms/raw/dbo.apache_racing_experience",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT32"
+			},
+			{
+				"name": "model",
+				"type": "UTF8"
+			},
+			{
+				"name": "name",
+				"type": "UTF8"
+			},
+			{
+				"name": "mobile",
+				"type": "UTF8"
+			},
+			{
+				"name": "email",
+				"type": "UTF8"
+			},
+			{
+				"name": "city",
+				"type": "UTF8"
+			},
+			{
+				"name": "user_ip",
+				"type": "UTF8"
+			},
+			{
+				"name": "visible",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "created_on",
+				"type": "INT96"
+			},
+			{
+				"name": "venue",
+				"type": "UTF8"
+			},
+			{
+				"name": "website",
+				"type": "UTF8"
+			},
+			{
+				"name": "event",
+				"type": "UTF8"
+			},
+			{
+				"name": "height",
+				"type": "UTF8"
+			},
+			{
+				"name": "bg",
+				"type": "UTF8"
+			},
+			{
+				"name": "gender",
+				"type": "UTF8"
+			},
+			{
+				"name": "year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

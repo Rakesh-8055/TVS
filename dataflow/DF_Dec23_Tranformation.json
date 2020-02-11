@@ -1,0 +1,73 @@
+{
+	"name": "DF_Dec23_Tranformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Test1_Transformation_Source",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Test2_Transformation_Source",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Test3_Transformation_Source",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Transformed_Data_Dec23",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Aggregate1"
+				},
+				{
+					"name": "Aggregate2"
+				},
+				{
+					"name": "Aggregate3"
+				},
+				{
+					"name": "Select1"
+				},
+				{
+					"name": "Select2"
+				},
+				{
+					"name": "Select3"
+				},
+				{
+					"name": "Union1"
+				},
+				{
+					"name": "DerivedColumn1"
+				},
+				{
+					"name": "Filter1"
+				},
+				{
+					"name": "Filter2"
+				}
+			],
+			"script": "source(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tcity as string,\n\t\tmodel as string,\n\t\tcreated_on as timestamp,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet') ~> source1\nsource(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tcity as string,\n\t\tmodel as string,\n\t\tcreated_on as timestamp,\n\t\tstate as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> source2\nsource(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tcity as string,\n\t\tmodel as string,\n\t\tcreated_on as timestamp,\n\t\tutm_source as string,\n\t\tstate as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'parquet') ~> source3\nsource1 aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> Aggregate1\nsource2 aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> Aggregate2\nsource3 aggregate(groupBy(id = id),\n\teach(match(name!='id'), $$ = last($$))) ~> Aggregate3\nFilter1 select(mapColumn(\n\t\tid,\n\t\tcity,\n\t\tmodel,\n\t\tcreated_on\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nFilter2 select(mapColumn(\n\t\tid,\n\t\tcity,\n\t\tmodel,\n\t\tcreated_on,\n\t\tstate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nAggregate3 select(mapColumn(\n\t\tid,\n\t\tcity,\n\t\tmodel,\n\t\tcreated_on,\n\t\tutm_source,\n\t\tstate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select3\nSelect2, Select1, Select3 union(byName: true)~> Union1\nUnion1 derive(each(match(name=='created_on'), 'year' = year(toDate(substring(toString($$),0,10),'yyyy-MM-dd')))) ~> DerivedColumn1\nAggregate1 filter(model=='apache') ~> Filter1\nAggregate2 filter(model=='apache') ~> Filter2\nDerivedColumn1 sink(input(\n\t\tid as string,\n\t\tname as string,\n\t\tenquiry_date as string,\n\t\tcreated_on as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionBy('key',\n\t\t0,\n\t\tyear\n\t)) ~> sink2"
+		}
+	}
+}

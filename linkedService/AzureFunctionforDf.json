@@ -1,0 +1,12 @@
+{
+	"name": "AzureFunctionforDf",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureFunction",
+		"typeProperties": {
+			"functionAppUrl": "https://sample-demo.azurewebsites.net",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlRWU00tT09HLURFTU9fMTVkMzAxMTAtNDZhYy00MmRhLTkzYzUtYzY1OTg3MGRmNjY4Ig0KfQ=="
+		}
+	}
+}

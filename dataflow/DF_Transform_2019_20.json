@@ -1,0 +1,82 @@
+{
+	"name": "DF_Transform_2019_20",
+	"properties": {
+		"folder": {
+			"name": "tvsm-lms-transformation_dataflows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Transform_StagingData1",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceTransformStagingData"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_City_District_State",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceDistrictStateMapping"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Source_Model_Mapping",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourceModelMapping"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Tranform_Prod_19to20",
+						"type": "DatasetReference"
+					},
+					"name": "DFSinkTransformationData18to19"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DFSelectTransformStagingData2"
+				},
+				{
+					"name": "DFSurrogateKey"
+				},
+				{
+					"name": "DFJoinDistrictState"
+				},
+				{
+					"name": "DFDCUpperCaseCity"
+				},
+				{
+					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "DFFilterNullModel"
+				},
+				{
+					"name": "DFJoinModelForNull"
+				},
+				{
+					"name": "DFFilterExistingModels"
+				},
+				{
+					"name": "DFSelectTransformStagingData"
+				},
+				{
+					"name": "DFUnionModels"
+				},
+				{
+					"name": "DFDCPartitionTransformData"
+				},
+				{
+					"name": "DFDCTrimCity"
+				}
+			],
+			"script": "source(output(\n\t\tmobile as string,\n\t\tmodel as string,\n\t\tsource as string,\n\t\tcreated_on as timestamp,\n\t\tcity as string,\n\t\tdistrict as string,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\ttable_name as string,\n\t\tflag as string,\n\t\tutm_content as string,\n\t\tstate as string,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpurgeFiles: true,\n\tformat: 'parquet') ~> DFSourceTransformStagingData\nsource(output(\n\t\tcity as string,\n\t\tdistrict as string,\n\t\tstate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> DFSourceDistrictStateMapping\nsource(output(\n\t\tsource as string,\n\t\tmodel as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> DFSourceModelMapping\nDFFilterExistingModels select(mapColumn(\n\t\tmobile,\n\t\tmodel,\n\t\tsource,\n\t\tcreated_on,\n\t\tcity = {DFDCTrimCity@city},\n\t\tutm_source,\n\t\tutm_medium,\n\t\tutm_campaign,\n\t\ttable_name,\n\t\tflag,\n\t\tutm_content,\n\t\tstate = {DFSourceDistrictStateMapping@state},\n\t\tcreated_year = year,\n\t\tdistrict = {DFSourceDistrictStateMapping@district}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectTransformStagingData2\nDFUnionModels keyGenerate(output(id as long),\n\tstartAt: 1L) ~> DFSurrogateKey\nDFDCTrimCity, DFSourceDistrictStateMapping join(DFDCTrimCity@city == DFSourceDistrictStateMapping@city,\n\tjoinType:'left',\n\tbroadcast: 'none')~> DFJoinDistrictState\nDFSourceTransformStagingData derive(city = upper(city)) ~> DFDCUpperCaseCity\nDFSurrogateKey split(created_on <= toTimestamp('2020-03-31 23:59:59.59') && created_on >= toTimestamp('2019-04-01 00:00:00.00'),\n\tdisjoint: true) ~> ConditionalSplit1@(trans2019to20)\nDFJoinDistrictState filter(model=='N/A') ~> DFFilterNullModel\nDFFilterNullModel, DFSourceModelMapping join(DFSourceTransformStagingData@source == DFSourceModelMapping@source,\n\tjoinType:'left',\n\tbroadcast: 'none')~> DFJoinModelForNull\nDFJoinDistrictState filter(model!='N/A') ~> DFFilterExistingModels\nDFJoinModelForNull select(mapColumn(\n\t\tmobile,\n\t\tsource = {DFSourceTransformStagingData@source},\n\t\tcreated_on,\n\t\tcity = {DFDCTrimCity@city},\n\t\tutm_source,\n\t\tutm_medium,\n\t\tutm_campaign,\n\t\ttable_name,\n\t\tflag,\n\t\tutm_content,\n\t\tcreated_year = year,\n\t\tdistrict = {DFSourceDistrictStateMapping@district},\n\t\tstate = {DFSourceDistrictStateMapping@state},\n\t\tmodel = {DFSourceModelMapping@model}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DFSelectTransformStagingData\nDFSelectTransformStagingData2, DFSelectTransformStagingData union(byName: true)~> DFUnionModels\nConditionalSplit1@trans2019to20 derive(each(match(name=='created_on'), 'year' = year(toDate(substring(toString($$),0,10),'yyyy-MM-dd')))) ~> DFDCPartitionTransformData\nDFDCUpperCaseCity derive(city = trim(city,' ')) ~> DFDCTrimCity\nDFDCPartitionTransformData sink(input(\n\t\tmobile as string,\n\t\tmodel as string,\n\t\tsource as string,\n\t\tcreated_on as timestamp,\n\t\tcity as string,\n\t\tutm_source as string,\n\t\tutm_medium as string,\n\t\tutm_campaign as string,\n\t\ttable_name as string,\n\t\tflag as string,\n\t\tutm_content as string,\n\t\tstate as string,\n\t\tcreated_year as string,\n\t\tdistrict as string,\n\t\tid as integer,\n\t\tyear as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\ttruncate: true,\n\tpartitionBy('key',\n\t\t0,\n\t\tyear\n\t)) ~> DFSinkTransformationData18to19"
+		}
+	}
+}

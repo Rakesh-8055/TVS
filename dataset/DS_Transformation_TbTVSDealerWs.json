@@ -1,0 +1,97 @@
+{
+	"name": "DS_Transformation_TbTVSDealerWs",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-transform_datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "tvsm/oog/prospect360/lms/raw/dbo.tb_tvs_dealerWs",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT32"
+			},
+			{
+				"name": "dealer_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "dealer_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "cust_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "cust_mobile",
+				"type": "UTF8"
+			},
+			{
+				"name": "cust_email",
+				"type": "UTF8"
+			},
+			{
+				"name": "cust_city",
+				"type": "UTF8"
+			},
+			{
+				"name": "brandname",
+				"type": "UTF8"
+			},
+			{
+				"name": "cust_flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "latitude",
+				"type": "UTF8"
+			},
+			{
+				"name": "longitude",
+				"type": "UTF8"
+			},
+			{
+				"name": "Created_on",
+				"type": "INT96"
+			},
+			{
+				"name": "wsgetdate",
+				"type": "INT96"
+			},
+			{
+				"name": "hot_or_cold",
+				"type": "INT32"
+			},
+			{
+				"name": "Lead_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "comments",
+				"type": "UTF8"
+			},
+			{
+				"name": "api_status",
+				"type": "UTF8"
+			},
+			{
+				"name": "year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,109 @@
+{
+	"name": "DS_Transformation_TbTVSNtorqFbLeads",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-transform_datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "tvsm/oog/prospect360/lms/raw/dbo.tb_tvs_ntorq_fb_leads",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "UTF8"
+			},
+			{
+				"name": "created_date",
+				"type": "UTF8"
+			},
+			{
+				"name": "created_time",
+				"type": "UTF8"
+			},
+			{
+				"name": "ad_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "adset_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "adset_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "campaign_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "campaign_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "form_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "form_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "is_organic",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "email",
+				"type": "UTF8"
+			},
+			{
+				"name": "full_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "phone_number",
+				"type": "UTF8"
+			},
+			{
+				"name": "State",
+				"type": "UTF8"
+			},
+			{
+				"name": "Pushed_Lead_Status",
+				"type": "UTF8"
+			},
+			{
+				"name": "hot_or_cold",
+				"type": "UTF8"
+			},
+			{
+				"name": "createdon",
+				"type": "INT96"
+			},
+			{
+				"name": "city",
+				"type": "UTF8"
+			},
+			{
+				"name": "flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

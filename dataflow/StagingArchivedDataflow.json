@@ -1,0 +1,32 @@
+{
+	"name": "StagingArchivedDataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "StagingDataSourceMahan",
+						"type": "DatasetReference"
+					},
+					"name": "StagingDataSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "StagingArchivedSinkADSLG2Connection",
+						"type": "DatasetReference"
+					},
+					"name": "stagingaarchivedatasink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DerivedColumn1"
+				}
+			],
+			"script": "source(output(\n\t\tid as string,\n\t\tname as string,\n\t\tenquiry_date as string,\n\t\tcreated_on as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\twildcardPaths:['test/staging_data/*.txt']) ~> StagingDataSource\nStagingDataSource derive(each(match(position==1), 'year' = year(currentDate()), 'month' = month(currentDate()))) ~> DerivedColumn1\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionBy('key',\n\t\t0,\n\t\tyear,\n\t\tmonth\n\t)) ~> stagingaarchivedatasink"
+		}
+	}
+}

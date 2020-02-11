@@ -1,0 +1,317 @@
+{
+	"name": "DS_ProductionData1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tablename": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "tvsm-lms-production-datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat('tvsm/oog/prospect360/lms/production','/',dataset().tablename)",
+					"type": "Expression"
+				},
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "app_info_firebase_app_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "app_info_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "app_info_install_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "app_info_version",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_category",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_is_limited_ad_tracking",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_language",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_mobile_brand_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_mobile_marketing_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_mobile_model_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_mobile_os_hardware_model",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_operating_system",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_operating_system_version",
+				"type": "UTF8"
+			},
+			{
+				"name": "device_time_zone_offset_seconds",
+				"type": "INT64"
+			},
+			{
+				"name": "device_vendor_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_bundle_sequence_id",
+				"type": "INT64"
+			},
+			{
+				"name": "event_date",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_campaign_info_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_click_timestamp",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_engaged_session_event",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_engagement_time_msec",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_entrances",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_error_value",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_fatal",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_feedbackMessage",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_firebase_conversion",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_firebase_error",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_firebase_event_origin",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_firebase_previous_class",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_firebase_previous_id",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_firebase_screen_class",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_firebase_screen_id",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_ga_session_id",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_ga_session_number",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_medium",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_previous_app_version",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_previous_first_open_count",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_previous_os_version",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_session_engaged",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_system_app",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_system_app_update",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_term",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_timestamp",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_update_with_analytics",
+				"type": "INT64"
+			},
+			{
+				"name": "event_params_userId",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_vehicleName",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_params_vinNumber",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_previous_timestamp",
+				"type": "INT64"
+			},
+			{
+				"name": "event_server_timestamp_offset",
+				"type": "INT64"
+			},
+			{
+				"name": "event_timestamp",
+				"type": "INT64"
+			},
+			{
+				"name": "geo_city",
+				"type": "UTF8"
+			},
+			{
+				"name": "geo_continent",
+				"type": "UTF8"
+			},
+			{
+				"name": "geo_country",
+				"type": "UTF8"
+			},
+			{
+				"name": "geo_metro",
+				"type": "UTF8"
+			},
+			{
+				"name": "geo_region",
+				"type": "UTF8"
+			},
+			{
+				"name": "geo_sub_continent",
+				"type": "UTF8"
+			},
+			{
+				"name": "platform",
+				"type": "UTF8"
+			},
+			{
+				"name": "stream_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "traffic_source_medium",
+				"type": "UTF8"
+			},
+			{
+				"name": "traffic_source_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "traffic_source_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "user_first_touch_timestamp",
+				"type": "INT64"
+			},
+			{
+				"name": "user_properties_first_open_time",
+				"type": "INT64"
+			},
+			{
+				"name": "user_properties_first_open_time_set_timestamp_micros",
+				"type": "INT64"
+			},
+			{
+				"name": "user_properties_ga_session_id",
+				"type": "INT64"
+			},
+			{
+				"name": "user_properties_ga_session_id_set_timestamp_micros",
+				"type": "INT64"
+			},
+			{
+				"name": "user_properties_ga_session_number",
+				"type": "INT64"
+			},
+			{
+				"name": "user_properties_ga_session_number_set_timestamp_micros",
+				"type": "INT64"
+			},
+			{
+				"name": "user_pseudo_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "event_name",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

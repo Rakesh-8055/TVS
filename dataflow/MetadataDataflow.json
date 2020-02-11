@@ -1,0 +1,32 @@
+{
+	"name": "MetadataDataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "StagingDataSourceMahan",
+						"type": "DatasetReference"
+					},
+					"name": "StagingDataSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "MetadataSinkADSLG2Connection",
+						"type": "DatasetReference"
+					},
+					"name": "metadatasink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "MaxOfLastModifiedDateAggregate"
+				}
+			],
+			"script": "source(output(\n\t\tid as string,\n\t\tname as string,\n\t\tenquiry_date as string,\n\t\tcreated_on as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpurgeFiles: true,\n\twildcardPaths:['test/staging_data/*.*']) ~> StagingDataSource\nStagingDataSource aggregate(created_on = max(created_on)) ~> MaxOfLastModifiedDateAggregate\nMaxOfLastModifiedDateAggregate sink(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> metadatasink"
+		}
+	}
+}

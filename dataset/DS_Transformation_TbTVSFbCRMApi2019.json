@@ -1,0 +1,105 @@
+{
+	"name": "DS_Transformation_TbTVSFbCRMApi2019",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-transform_datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "tvsm/oog/prospect360/lms/raw/dbo.tb_tvs_fb_crm_api_2019",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT64"
+			},
+			{
+				"name": "name",
+				"type": "UTF8"
+			},
+			{
+				"name": "mobile",
+				"type": "UTF8"
+			},
+			{
+				"name": "email",
+				"type": "UTF8"
+			},
+			{
+				"name": "model_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "city",
+				"type": "UTF8"
+			},
+			{
+				"name": "create_date_get",
+				"type": "INT96"
+			},
+			{
+				"name": "create_date",
+				"type": "INT96"
+			},
+			{
+				"name": "model_id",
+				"type": "INT32"
+			},
+			{
+				"name": "language_id",
+				"type": "INT32"
+			},
+			{
+				"name": "utm_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_medium",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_campaign",
+				"type": "UTF8"
+			},
+			{
+				"name": "gclid",
+				"type": "UTF8"
+			},
+			{
+				"name": "hot_or_cold",
+				"type": "INT32"
+			},
+			{
+				"name": "flag",
+				"type": "UTF8"
+			},
+			{
+				"name": "crm_push",
+				"type": "INT32"
+			},
+			{
+				"name": "crm_response",
+				"type": "UTF8"
+			},
+			{
+				"name": "form_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

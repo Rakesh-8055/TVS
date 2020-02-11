@@ -1,0 +1,149 @@
+{
+	"name": "DS_Transformation_ApacheMotoSoulRegistrations",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tvsm-lms-transform_datasets"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "tvsm/oog/prospect360/lms/raw/dbo.apache_moto_soul_registrations",
+				"fileSystem": "home"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT32"
+			},
+			{
+				"name": "msid",
+				"type": "UTF8"
+			},
+			{
+				"name": "fname",
+				"type": "UTF8"
+			},
+			{
+				"name": "lname",
+				"type": "UTF8"
+			},
+			{
+				"name": "email",
+				"type": "UTF8"
+			},
+			{
+				"name": "mobile",
+				"type": "UTF8"
+			},
+			{
+				"name": "emergency_mobile",
+				"type": "UTF8"
+			},
+			{
+				"name": "state",
+				"type": "UTF8"
+			},
+			{
+				"name": "city",
+				"type": "UTF8"
+			},
+			{
+				"name": "gender",
+				"type": "UTF8"
+			},
+			{
+				"name": "age",
+				"type": "UTF8"
+			},
+			{
+				"name": "bloodgroup",
+				"type": "UTF8"
+			},
+			{
+				"name": "model",
+				"type": "UTF8"
+			},
+			{
+				"name": "other_vehicle",
+				"type": "UTF8"
+			},
+			{
+				"name": "chk_groupride",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "apache_pro_performance",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "dirt_track",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "slow_track",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "obstacle_race",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "motocross_fit",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "fmsci_license",
+				"type": "UTF8"
+			},
+			{
+				"name": "userip",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_source",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_medium",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_campaign",
+				"type": "UTF8"
+			},
+			{
+				"name": "utm_content",
+				"type": "UTF8"
+			},
+			{
+				"name": "createdon",
+				"type": "INT96"
+			},
+			{
+				"name": "team_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "status",
+				"type": "UTF8"
+			},
+			{
+				"name": "payment_status",
+				"type": "INT32"
+			},
+			{
+				"name": "year",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

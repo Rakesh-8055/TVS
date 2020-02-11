@@ -1,0 +1,46 @@
+{
+	"name": "PL_Dec23_Tranformation",
+	"properties": {
+		"activities": [
+			{
+				"name": "dataflow8",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF_Dec23_Tranformation",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"sink2": {
+								"tablename": {
+									"value": "@pipeline().parameters.tablename",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"tablename": {
+				"type": "string",
+				"defaultValue": "all_tables_transformed_data"
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

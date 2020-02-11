@@ -1,0 +1,31 @@
+{
+	"name": "testdf1",
+	"properties": {
+		"folder": {
+			"name": "test_incr_update_data"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "testinmgParquet3",
+						"type": "DatasetReference"
+					},
+					"name": "CopiedDataSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ExistingDataProdData",
+						"type": "DatasetReference"
+					},
+					"name": "MetadataSink"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tid as string,\n\t\tname as string,\n\t\tenquiry_date as string,\n\t\tcreated_on as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\twildcardPaths:['test_incr_update_data/proddata/*.parquet']) ~> CopiedDataSource\nCopiedDataSource sink(input(\n\t\tid as integer,\n\t\tname as string,\n\t\tenquiry_date as timestamp,\n\t\tcreated_on as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\ttruncate: true) ~> MetadataSink"
+		}
+	}
+}

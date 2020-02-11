@@ -1,0 +1,6 @@
+{
+	"name": "integrationRuntimeTvs",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

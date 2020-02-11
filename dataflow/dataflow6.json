@@ -1,0 +1,45 @@
+{
+	"name": "dataflow6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "InputDataStagingData",
+						"type": "DatasetReference"
+					},
+					"name": "INPUTDATA"
+				},
+				{
+					"dataset": {
+						"referenceName": "ExistingDataProdData",
+						"type": "DatasetReference"
+					},
+					"name": "EXISTINGDATA"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ExistingDataProdData",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Exists1"
+				},
+				{
+					"name": "Union1"
+				},
+				{
+					"name": "DerivedColumn1"
+				}
+			],
+			"script": "source(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tenquiry_date as timestamp,\n\t\tcreated_on as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet') ~> INPUTDATA\nsource(output(\n\t\tid as integer,\n\t\tname as string,\n\t\tenquiry_date as timestamp,\n\t\tcreated_on as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet') ~> EXISTINGDATA\nEXISTINGDATA, INPUTDATA exists(EXISTINGDATA@id == INPUTDATA@id,\n\tnegate:true,\n\tbroadcast: 'none')~> Exists1\nINPUTDATA, Exists1 union(byName: true)~> Union1\nUnion1 derive(each(match(name=='enquiry_date'), 'year' = year(toDate(substring(toString($$),0,10),'yyyy-MM-dd')))) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tid as integer,\n\t\tname as string,\n\t\tenquiry_date as timestamp,\n\t\tcreated_on as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\ttruncate: true,\n\tpartitionBy('key',\n\t\t0,\n\t\tyear\n\t)) ~> sink1"
+		}
+	}
+}

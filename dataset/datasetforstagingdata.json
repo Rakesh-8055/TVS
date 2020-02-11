@@ -1,0 +1,38 @@
+{
+	"name": "datasetforstagingdata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "data_c1686ff8-f2e9-4967-b9af-a9c1fb0ec8de_a754d864-521a-4b13-abd0-e98e68d27507.txt",
+				"folderPath": "test/staging_data",
+				"fileSystem": "sample"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "5",
+				"type": "String"
+			},
+			{
+				"name": "eeee",
+				"type": "String"
+			},
+			{
+				"name": "22",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
